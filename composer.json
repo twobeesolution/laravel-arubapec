@@ -1,0 +1,29 @@
+{
+    "name": "twobeesolution/laravel-arubapec",
+    "version": "v0.1",
+    "description": "ArubaPec API client per Laravel",
+    "type": "library",
+    "require": {
+        "illuminate/support": ">=5.5.0",
+        "php": ">=7.1.0"
+    },
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Lorenzo Breda",
+            "email": "l.breda@twobeesolution.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TwoBeeSolution\\ArubaPec\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TwoBeeSolution\\ArubaPec\\ArubaPecServiceProvider"
+            ]
+        }
+    }
+}
