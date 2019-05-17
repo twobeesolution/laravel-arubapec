@@ -73,7 +73,8 @@ class ArubaPecWsClient {
     }
 
     /**
-     * Verifies is a person is already registered
+     * Verifies is a person already has a user information record
+     *
      * @param string $codice_fiscale Person's codice fiscale
      * @return bool Is the person registered?
      */
@@ -102,6 +103,7 @@ class ArubaPecWsClient {
 
     /**
      * Returns a person ID
+     *
      * @param string $codice_fiscale Person's codice fiscale
      * @return string Person ID
      */
@@ -135,7 +137,8 @@ class ArubaPecWsClient {
     }
 
     /**
-     * Aggiunge un'anagrafica
+     * Adds user information record
+     *
      * @param string $nome
      * @param string $cognome
      * @param string $email
@@ -192,6 +195,8 @@ class ArubaPecWsClient {
     }
 
     /**
+     * Creates a PEC Box
+     *
      * @param $id_titolare string ID del titolare
      * @param $nome_casella string Nome della casella di posta
      * @param $password string Password della casella di posta
