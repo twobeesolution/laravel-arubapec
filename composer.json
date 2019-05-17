@@ -1,9 +1,10 @@
 {
     "name": "twobeesolution/laravel-arubapec",
-    "version": "v0.1",
+    "version": "v0.2",
     "description": "ArubaPec API client per Laravel",
     "type": "library",
     "require": {
+        "ext-soap": "*",
         "illuminate/support": ">=5.5.0",
         "php": ">=7.1.0"
     },

@@ -2,6 +2,11 @@
 
 namespace TwoBeeSolution\ArubaPec;
 
+use Illuminate\Support\Facades\Config;
+use SoapClient;
+use SoapFault;
+use SoapHeader;
+
 class ArubaPecWsClient {
 
     protected $client = null;
@@ -19,13 +24,14 @@ class ArubaPecWsClient {
 
     /**
      * Initializes a session on the Aruba PEC WS
+     * @throws SoapFault
      */
     public function __construct()
     {
         $this->client = new SoapClient("https://areaclienti.arubapec.it/arubapec/rpc/EmailManager?wsdl", ['trace' => 1,]);
         $auth = [
-            'username' => config('aruba-pec.user'),
-            'password' => config('aruba-pec.pass'),
+            'username' => Config::get('aruba-pec.user'),
+            'password' => Config::get('aruba-pec.pass'),
         ];
         $header = new SoapHeader('http://email.service.rpc.arubapec.it','AuthHeader',$auth);
         $this->client->__setSoapHeaders($header);
@@ -38,7 +44,7 @@ class ArubaPecWsClient {
      */
     public function verificaEsistenzaEmail(string $name) : ?bool
     {
-        if(config('aruba-pec.dry_run', false)){
+        if(Config::get('aruba-pec.dry_run', false)){
             return true;
         }
 
@@ -46,7 +52,7 @@ class ArubaPecWsClient {
 
         $params = [
             'nomeCasella' => $name,
-            'nomeDominio' => config('aruba-pec.domain')
+            'nomeDominio' => Config::get('aruba-pec.domain')
         ];
 
         try {
@@ -73,7 +79,7 @@ class ArubaPecWsClient {
      */
     public function verificaEsistenzaAnagrafica(string $codice_fiscale) : ?bool
     {
-        if(config('aruba-pec.dry_run', false)){
+        if(Config::get('aruba-pec.dry_run', false)){
             return true;
         }
 
@@ -101,7 +107,7 @@ class ArubaPecWsClient {
      */
     public function getIdTitolare(string $codice_fiscale) : ?string
     {
-        if(config('aruba-pec.dry_run', false)){
+        if(Config::get('aruba-pec.dry_run', false)){
             return '1';
         }
 
@@ -159,7 +165,7 @@ class ArubaPecWsClient {
         string $cellulare = ''
     ) : ?string
     {
-        if(config('aruba-pec.dry_run', false)){
+        if(Config::get('aruba-pec.dry_run', false)){
             return '1';
         }
 
@@ -192,7 +198,7 @@ class ArubaPecWsClient {
      * @return bool Stato di creazione della casella di posta
      */
     public function creaCasella($id_titolare, $nome_casella, $password){
-        if(config('aruba-pec.dry_run', false)){
+        if(Config::get('aruba-pec.dry_run', false)){
             return true;
         }
 
@@ -202,11 +208,11 @@ class ArubaPecWsClient {
             'idTitolare'  => $id_titolare,
             'nomeCasella' => mb_strtolower($nome_casella),
             'password'    => $password,
-            'nomeDominio' => config('aruba-pec.domain'),
-            'classe'      => config('aruba-pec.class'),
-            'tipoRinnovo' => config('aruba-pec.renewal_type', 'T'),
-            'durata'      => config('aruba-pec.expires_after', '1'),
-            'cig'         => config('aruba-pec.cig'),
+            'nomeDominio' => Config::get('aruba-pec.domain'),
+            'classe'      => Config::get('aruba-pec.class'),
+            'tipoRinnovo' => Config::get('aruba-pec.renewal_type', 'T'),
+            'durata'      => Config::get('aruba-pec.expires_after', '1'),
+            'cig'         => Config::get('aruba-pec.cig'),
         ];
 
         try {
