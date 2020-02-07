@@ -7,7 +7,8 @@ use SoapClient;
 use SoapFault;
 use SoapHeader;
 
-class ArubaPecWsClient {
+class ArubaPecWsClient
+{
 
     protected $client = null;
     protected $lastError = '';
@@ -17,7 +18,7 @@ class ArubaPecWsClient {
      * Gets the last error
      * @return string Last error
      */
-    public function getLastError() : string
+    public function getLastError(): string
     {
         return $this->lastError;
     }
@@ -33,7 +34,7 @@ class ArubaPecWsClient {
             'username' => Config::get('aruba-pec.user'),
             'password' => Config::get('aruba-pec.pass'),
         ];
-        $header = new SoapHeader('http://email.service.rpc.arubapec.it','AuthHeader',$auth);
+        $header = new SoapHeader('http://email.service.rpc.arubapec.it', 'AuthHeader', $auth);
         $this->client->__setSoapHeaders($header);
     }
 
@@ -42,9 +43,9 @@ class ArubaPecWsClient {
      * @param string $name Username
      * @return bool Is the username registered?
      */
-    public function verificaEsistenzaEmail(string $name) : ?bool
+    public function verificaEsistenzaEmail(string $name): ?bool
     {
-        if(Config::get('aruba-pec.dry_run', false)){
+        if (Config::get('aruba-pec.dry_run', false)) {
             return true;
         }
 
@@ -57,17 +58,15 @@ class ArubaPecWsClient {
 
         try {
             $response = $client->VerificaEsistenzaEmail($params);
-        }
-        catch(SoapFault $e) {
+        } catch (SoapFault $e) {
             $this->lastError = $e->getMessage();
             return null;
         }
 
-        if($response->out->errorNum >= 0) {
+        if ($response->out->errorNum >= 0) {
             $this->lastError = $response->out->errorDesc;
             return null;
-        }
-        else {
+        } else {
             return ($response->out->returnValue == 1);
         }
     }
@@ -78,9 +77,9 @@ class ArubaPecWsClient {
      * @param string $codice_fiscale Person's codice fiscale
      * @return bool Is the person registered?
      */
-    public function verificaEsistenzaAnagrafica(string $codice_fiscale) : ?bool
+    public function verificaEsistenzaAnagrafica(string $codice_fiscale): ?bool
     {
-        if(Config::get('aruba-pec.dry_run', false)){
+        if (Config::get('aruba-pec.dry_run', false)) {
             return true;
         }
 
@@ -92,8 +91,7 @@ class ArubaPecWsClient {
 
         try {
             $response = $client->SelezionaTitolare($params);
-        }
-        catch(SoapFault $e) {
+        } catch (SoapFault $e) {
             $this->lastError = $e->getMessage();
             return null;
         }
@@ -107,30 +105,28 @@ class ArubaPecWsClient {
      * @param string $codice_fiscale Person's codice fiscale
      * @return string Person ID
      */
-    public function getIdTitolare(string $codice_fiscale) : ?string
+    public function getIdTitolare(string $codice_fiscale): ?string
     {
-        if(Config::get('aruba-pec.dry_run', false)){
+        if (Config::get('aruba-pec.dry_run', false)) {
             return '1';
         }
 
         $params = array(
-            'codiceFiscale'=>$codice_fiscale
+            'codiceFiscale' => $codice_fiscale
         );
 
         $client = $this->client;
 
         try {
             $response = $client->SelezionaTitolare($params);
-        }
-        catch(SoapFault $e) {
+        } catch (SoapFault $e) {
             $this->lastError = $e->getMessage();
             return null;
         }
 
-        if($response->out->errorNum == 0){
+        if ($response->out->errorNum == 0) {
             return $response->out->IDTitolare;
-        }
-        else{
+        } else {
             $this->lastError = $response->out->errorDesc;
             return null;
         }
@@ -166,9 +162,9 @@ class ArubaPecWsClient {
         string $telefono = '',
         string $fax = '',
         string $cellulare = ''
-    ) : ?string
+    ): ?string
     {
-        if(Config::get('aruba-pec.dry_run', false)){
+        if (Config::get('aruba-pec.dry_run', false)) {
             return '1';
         }
 
@@ -178,17 +174,15 @@ class ArubaPecWsClient {
 
         try {
             $response = $client->InserisciTitolare($anag->toArray());
-        }
-        catch(SoapFault $e) {
+        } catch (SoapFault $e) {
             $this->lastError = $e->getMessage();
             return null;
         }
 
-        if($response->out->errorNum == 0){
+        if ($response->out->errorNum == 0) {
             //Ritorno l'id dell'utente
             return $response->out->returnValue;
-        }
-        else{
+        } else {
             $this->lastError = $response->out->errorDesc;
             return null;
         }
@@ -197,41 +191,41 @@ class ArubaPecWsClient {
     /**
      * Creates a PEC Box
      *
-     * @param $id_titolare string ID del titolare
-     * @param $nome_casella string Nome della casella di posta
-     * @param $password string Password della casella di posta
+     * @param $id_titolare string Person id
+     * @param $nome_casella string Mailbox name
+     * @param $email_recupero string Mailbox password recovery email
      * @return bool Stato di creazione della casella di posta
      */
-    public function creaCasella($id_titolare, $nome_casella, $password){
-        if(Config::get('aruba-pec.dry_run', false)){
+    public function creaCasella($id_titolare, $nome_casella, $email_recupero)
+    {
+        if (Config::get('aruba-pec.dry_run', false)) {
             return true;
         }
 
         $client = $this->client;
 
         $params = [
-            'idTitolare'  => $id_titolare,
-            'nomeCasella' => mb_strtolower($nome_casella),
-            'password'    => $password,
-            'nomeDominio' => Config::get('aruba-pec.domain'),
-            'classe'      => Config::get('aruba-pec.class'),
-            'tipoRinnovo' => Config::get('aruba-pec.renewal_type', 'T'),
-            'durata'      => Config::get('aruba-pec.expires_after', '1'),
-            'cig'         => Config::get('aruba-pec.cig'),
+            'idTitolare'    => $id_titolare,
+            'nomeCasella'   => mb_strtolower($nome_casella),
+            'emailRecupero' => $email_recupero,
+            'nomeDominio'   => Config::get('aruba-pec.domain'),
+            'classe'        => Config::get('aruba-pec.class'),
+            'tipoRinnovo'   => Config::get('aruba-pec.renewal_type', 'T'),
+            'durata'        => Config::get('aruba-pec.expires_after', '1'),
+            'cigOda'        => Config::get('aruba-pec.cig'),
+            'codicePA'      => Config::get('aruba-pec.codice_pa'),
         ];
 
         try {
             $response = $client->Certifica($params);
-        }
-        catch(SoapFault $e) {
+        } catch (SoapFault $e) {
             $this->lastError = $e->getMessage();
             return null;
         }
 
-        if($response->out->errorNum == 0){
+        if ($response->out->errorNum == 0) {
             return true;
-        }
-        else{
+        } else {
             $this->lastError = $response->out->errorDesc;
             return null;
         }
