@@ -2,22 +2,25 @@
 
 return [
     // Login
-    'user' => '',
-    'pass' => '',
+    'user'          => env('PEC_USER', ''),
+    'pass'          => env('PEC_PASS', ''),
 
     // PEC certified domain
-    'domain' => '',
-    'class'  => 'EMAIL',
+    'domain'        => env('PEC_DOMAIN', ''),
+    'class'         => env('PEC_CLASS', 'EMAIL'),
 
     // Renewal type. T for automatic, S for manual
-    'renewal' => 'T',
+    'renewal'       => env('PEC_RENEWAL_TYPE', 'T'),
 
     // Years to expiration (1-5)
-    'expires_after' => '1',
+    'expires_after' => env('PEC_EXPIRES_AFTER', '1'),
 
     // Codice Identificativo Gara
-    'cig' => '',
+    'cig'           => env('PEC_CIG', ''),
+
+    // Codice PA
+    'codice_pa'     => env('PEC_CODICE_PA', ''),
 
     // Dry-run mode (doesn't call the Aruba API)
-    'dry_run' => false,
+    'dry_run'       => env('PEC_DRY_RUN', false),
 ];
