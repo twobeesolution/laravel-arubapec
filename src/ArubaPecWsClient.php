@@ -213,7 +213,7 @@ class ArubaPecWsClient
             'tipoRinnovo'   => Config::get('aruba-pec.renewal_type', 'T'),
             'durata'        => Config::get('aruba-pec.expires_after', '1'),
             'cigOda'        => Config::get('aruba-pec.cig'),
-            'codicePA'      => Config::get('aruba-pec.codice_pa'),
+            'codicePa'      => Config::get('aruba-pec.codice_pa'),
         ];
 
         try {
