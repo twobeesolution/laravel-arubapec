@@ -10,7 +10,7 @@ class ArubaPecAnagrafica {
     protected $codiceFiscale = '';
     protected $indirizzo = '';
     protected $cap = '';
-    protected $loc = '';
+    protected $comune = '';
     protected $provincia = '';
     protected $nazione = '';
     protected $telefono = '';
@@ -41,9 +41,9 @@ class ArubaPecAnagrafica {
     {
         $this->cap = $cap;
     }
-    public function setLoc (string $loc)
+    public function setComune (string $comune)
     {
-        $this->loc = $loc;
+        $this->comune = $comune;
     }
     public function setProvincia (string $provincia)
     {
@@ -90,9 +90,9 @@ class ArubaPecAnagrafica {
     {
         return $this->cap;
     }
-    public function getLoc () : string
+    public function getComune () : string
     {
-        return $this->loc;
+        return $this->comune;
     }
     public function getProvincia () : string
     {
@@ -118,10 +118,11 @@ class ArubaPecAnagrafica {
     /**
      * @param string $nome
      * @param string $cognome
+     * @param string $email
      * @param string $codiceFiscale
      * @param string $indirizzo
      * @param string $cap
-     * @param string $loc
+     * @param string $comune
      * @param string $provincia
      * @param string $nazione
      * @param string $telefono
@@ -135,7 +136,7 @@ class ArubaPecAnagrafica {
         string $codiceFiscale,
         string $indirizzo = '',
         string $cap = '',
-        string $loc = '',
+        string $comune = '',
         string $provincia = '',
         string $nazione = '',
         string $telefono = '',
@@ -149,7 +150,7 @@ class ArubaPecAnagrafica {
         $this->codiceFiscale = $codiceFiscale;
         $this->indirizzo = $indirizzo;
         $this->cap = $cap;
-        $this->loc = $loc;
+        $this->comune = $comune;
         $this->provincia = $provincia;
         $this->nazione = $nazione;
         $this->telefono = $telefono;
@@ -171,8 +172,8 @@ class ArubaPecAnagrafica {
     }
 
     /**
-     * Converts the object to an array
      * @return array
+     * @throws \ReflectionException
      */
     public function toArray() : array
     {
