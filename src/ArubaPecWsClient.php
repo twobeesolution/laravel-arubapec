@@ -63,7 +63,7 @@ class ArubaPecWsClient
             return null;
         }
 
-        if ($response->out->errorNum >= 0) {
+        if ($response->out->errorNum > 0) {
             $this->lastError = $response->out->errorDesc;
             return null;
         } else {
