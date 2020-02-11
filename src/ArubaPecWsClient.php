@@ -237,7 +237,7 @@ class ArubaPecWsClient
             return true;
         }
 
-        if (!($cancellationType == 'I' || $cancellationType == 'S' || $cancellationType == 'D')) {
+        if (!in_array($cancellationType, ['I', 'S', 'D',])) {
             return null;
         }
 
