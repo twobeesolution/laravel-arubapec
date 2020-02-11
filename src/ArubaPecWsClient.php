@@ -230,5 +230,38 @@ class ArubaPecWsClient
             return null;
         }
     }
+    
+    public function richiediDisdetta($mailBoxName, $domainName, $date, $cancellationType)
+    {
+        if (Config::get('aruba-pec.dry_run', false)) {
+            return true;
+        }
 
+        if (!($cancellationType == 'I' || $cancellationType == 'S' || $cancellationType == 'D')) {
+            return null;
+        }
+
+        $client = $this->client;
+
+        $params = [
+            'nomeCasella'       => $mailBoxName,
+            'nomeDominio'       => $domainName,
+            'dataDisdetta'      => $date,
+            'tipoCancellazione' => $cancellationType,
+        ];
+
+        try {
+            $response = $client->RichiediDisdetta($params);
+        } catch (SoapFault $e) {
+            $this->lastError = $e->getMessage();
+            return null;
+        }
+
+        if ($response->out->errorNum == 0) {
+            return true;
+        } else {
+            $this->lastError = $response->out->errorDesc;
+            return null;
+        }
+    }
 }
