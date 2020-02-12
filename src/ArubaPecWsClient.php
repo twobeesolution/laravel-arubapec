@@ -264,4 +264,33 @@ class ArubaPecWsClient
             return null;
         }
     }
+
+    public function cambiaEmailRecupero($mailBoxName, $domainName, $recoveryEmail)
+    {
+        if (Config::get('aruba-pec.dry_run', false)) {
+            return true;
+        }
+
+        $client = $this->client;
+
+        $params = [
+            'nomeCasella'       => $mailBoxName,
+            'nomeDominio'       => $domainName,
+            'emailRecupero'     => $recoveryEmail,
+        ];
+
+        try {
+            $response = $client->CambiaEmailRecupero($params);
+        } catch (SoapFault $e) {
+            $this->lastError = $e->getMessage();
+            return null;
+        }
+
+        if ($response->out->errorNum == 0) {
+            return true;
+        } else {
+            $this->lastError = $response->out->errorDesc;
+            return null;
+        }
+    }
 }
