@@ -16,6 +16,7 @@ class ArubaPecAnagrafica {
     protected $telefono = '';
     protected $fax = '';
     protected $cellulare = '';
+    protected $tipoTitolare;
 
     public function setNome (string $nome)
     {
@@ -64,6 +65,10 @@ class ArubaPecAnagrafica {
     public function setCellulare (string $cellulare)
     {
         $this->cellulare = preg_replace('/^\+39|\D/', '', $cellulare);;
+    }
+
+    public function setTipoTitolare (string $tipoTitolare) {
+        $this->tipoTitolare = $tipoTitolare;
     }
 
     public function getNome () : string
@@ -141,7 +146,8 @@ class ArubaPecAnagrafica {
         string $nazione = '',
         string $telefono = '',
         string $fax = '',
-        string $cellulare = ''
+        string $cellulare = '',
+        string $tipoTitolare = 'PRIVATO'
     )
     {
         $this->nome = $nome;
@@ -156,6 +162,7 @@ class ArubaPecAnagrafica {
         $this->telefono = $telefono;
         $this->fax = $fax;
         $this->cellulare = $cellulare;
+        $this->tipoTitolare = $tipoTitolare;
 
         $this->telefono = $this->telefono ? '+39.' . preg_replace('/^\+39|\D/', '', $this->telefono) : '';
         $this->fax = preg_replace('/^\+39|\D/', '', $this->fax);

@@ -173,7 +173,7 @@ class ArubaPecWsClient
         $client = $this->client;
 
         try {
-            $response = $client->InserisciTitolare($anag->toArray());
+            $response = $client->InserisciTitolare_v2($anag->toArray());
         } catch (SoapFault $e) {
             $this->lastError = $e->getMessage();
             return null;
